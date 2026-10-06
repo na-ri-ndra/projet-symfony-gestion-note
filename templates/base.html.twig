@@ -1,17 +1,187 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mon App{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bootstrap-icons-1.11.3/font/bootstrap-icons.css') }}">
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <style>
+        /* Dégradé linéaire pour header et footer */
+        header, footer {
+            background: linear-gradient(90deg,rgb(16, 48, 97),rgb(77, 125, 197));
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        /* Fixer header en haut et footer en bas */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+
+        /* Corps avec padding pour ne pas cacher sous header/footer */
+        body {
+            padding-top: 70px;
+            padding-bottom: 50px;
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Menu vertical à gauche */
+        nav.side-menu {
+            width: 8cm;
+            background: linear-gradient(180deg,rgb(182, 187, 197),rgb(13, 9, 238));
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+            animation: slideInLeft 0.8s ease forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        nav.side-menu a {
+            color: white;
+            text-decoration: none;
+            margin: 15px 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 8px 12px;
+            border-radius: 6px;
+            width: 100%;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav.side-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        /* Contenu principal */
+        main.content {
+            flex-grow: 1;
+            padding: 20px 40px;
+            animation: fadeIn 1s ease;
+            background: #f0f2ff;
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>GESTION DE NOTE</h1>
+    </div>
+</header>
+
+<nav class="side-menu">
+    <a href="{{ path('app_home') }}"><i class="bi-house-heart-fill"></i> Accueil</a>
+    <a href="{{ path('app_dashboard') }}"><i class="bi bi-boxes"></i> Dashbord</a>
+    <a href="{{ path('etudiant_index') }}"><i class="bi bi-person-fill-up"></i> Étudiant</a>
+    <a href="{{ path('note_index') }}"><i class="bi bi-journal-text"></i> Note</a>
+    <a href="{{ path('matiere_index') }}"><i class="bi bi-book"></i> Matiere</a>
+    <a href="{{ path('manual_logout') }}" class="btn btn-link text-danger">
+    <i class="bi bi-box-arrow-right" style="font-size: 1.5rem;"></i> Déconnexion
+    </a>
+    
+</nav>
+
+<main class="content container">
+    {% block body %}{% endblock %}
+</main>
+
+<footer>
+    &copy; {{ "now"|date("Y") }} - Gestion de note. Tous droits réservés.
+</footer>
+<!-- Formulaire logout caché -->
+
+</script>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+</body>
 </html>
+<style>
+/*.titre-image {
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-align: center;
+  background-image: url('images/imgLivre4.png');
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  margin-top: 0px;
+}
+
+.titre-image span {
+  display: inline-block;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+}
+
+.titre-image span:nth-child(1) { animation-delay: 0s; }
+.titre-image span:nth-child(2) { animation-delay: 0.1s; }
+.titre-image span:nth-child(3) { animation-delay: 0.2s; }
+.titre-image span:nth-child(4) { animation-delay: 0.3s; }
+.titre-image span:nth-child(5) { animation-delay: 0.4s; }
+.titre-image span:nth-child(6) { animation-delay: 0.5s; }
+.titre-image span:nth-child(7) { animation-delay: 0.6s; }
+.titre-image span:nth-child(8) { animation-delay: 0.7s; }
+.titre-image span:nth-child(9) { animation-delay: 0.8s; }
+.titre-image span:nth-child(10){ animation-delay: 0.9s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}*/
+</style>

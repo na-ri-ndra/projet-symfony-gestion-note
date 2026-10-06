@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EtudiantController!{% endblock %}
+
+{% block body %}
+
+<h1>Gestion des étudiants</h1>
+
+
+<!-- Liste des étudiants -->
+<table class="table table-bordered">
+    <thead>
+        <tr><th>Nom</th><th>Prénom</th><th>Date</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        {% for e in etudiants %}
+        <tr>
+            <td>{{ e.nom }}</td>
+            <td>{{ e.prenom }}</td>
+            <td>{{ e.dateNaissence|date('d/m/Y') }}</td>
+            <td>
+                <!-- Modifier -->
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ e.id }}"><i class="bi bi-pencil"></i> Modifier</button>
+                <!--Modal supprimer -->
+                <!-- Modal de confirmation de suppression -->
+<div class="modal fade" id="deleteModal{{ e.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ e.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="{{ path('etudiant_delete', {'id': e.id}) }}">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel{{ e.id }}">Confirmer la suppression</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer l'étudiant <strong>{{ e.nom }} {{ e.prenom }}</strong> ?
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+                <!-- Bouton qui déclenche la modale -->
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ e.id }}">
+                <i class="bi bi-trash"></i> Supprimer
+            </button>
+            </td>
+        </tr>
+
+        <!-- Modal modifier -->
+        <div class="modal fade" id="editModal{{ e.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ e.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            {# Ouvre le formulaire Symfony avec la bonne action #}
+            {{ form_start(formEdits[e.id], {'action': path('etudiant_update', {'id': e.id}), 'method': 'POST'}) }}
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel{{ e.id }}">Modifier {{ e.nom }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                {{ form_row(formEdits[e.id].nom) }}
+                {{ form_row(formEdits[e.id].prenom) }}
+                {{ form_row(formEdits[e.id].dateNaissence) }}
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Modifier</button>  {# Bouton Modifier ici #}
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+            {{ form_end(formEdits[e.id]) }}
+        </div>
+    </div>
+</div>
+
+        <!-- /Modal modifier -->
+        {% endfor %}
+    </tbody>
+</table>
+<!-- Button Ajouter -->
+<button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addModal"><i class="bi bi-plus-circle"></i> Ajouter un étudiant</button>
+<a href="{{ path('etudiant_pdf') }}" class="btn btn-secondary mb-3">
+    <i class="bi bi-file-earmark-pdf"></i> Exporter en PDF
+</a>
+<!-- Modal Ajout -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md"> <!-- centrée et taille moyenne -->
+        <div class="modal-content shadow-lg rounded-4 border-0">
+            {{ form_start(form) }}
+            <div class="modal-header bg-primary text-white rounded-top">
+                <h5 class="modal-title" id="addModalLabel">Ajouter un étudiant</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body p-4">
+                {{ form_widget(form) }}
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success fw-bold px-4">Ajouter</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<!-- /Modal Ajout -->
+<!-- Bootstrap JS -->
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+
+{% endblock %}

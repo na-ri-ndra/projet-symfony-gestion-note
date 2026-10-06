@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block body %}
+<body>
+    <div class="col-md-12">
+    <div class="card text-dark bg-warning mb-3">
+        <div class="card-header">Niveau d’intelligence (Moyenne des notes par étudiant)</div>
+        <div class="card-body">
+            <canvas id="chartMoyennes" width="600" height="300"></canvas>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctxMoyennes = document.getElementById('chartMoyennes').getContext('2d');
+new Chart(ctxMoyennes, {
+    type: 'bar',
+    data: {
+        labels: {{ moyennesEtudiants|map(e => e.nom)|json_encode|raw }},
+        datasets: [{
+            label: 'Moyenne des notes',
+            data: {{ moyennesEtudiants|map(e => e.moyenne)|json_encode|raw }},
+            backgroundColor: 'rgba(245, 59, 12, 0.6)',
+            borderColor: 'rgb(255, 253, 250)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+        },
+        scales: {
+            x: {
+                ticks: { color: 'black' }
+            },
+            y: {
+                beginAtZero: true,
+                max: 20, 
+                ticks: { color: 'black' }
+            }
+        }
+    }
+});
+
+</script>
+
+</body>
+{% endblock %}

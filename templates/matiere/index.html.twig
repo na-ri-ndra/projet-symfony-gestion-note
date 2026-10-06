@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Matières{% endblock %}
+
+{% block body %}
+<h1>Gestion des Matières</h1>
+
+
+
+<!-- Tableau des matières -->
+<table class="table table-bordered">
+    <thead>
+        <tr><th>Nom</th><th>Coefficient</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    {% for m in matieres %}
+        <tr>
+            <td>{{ m.nom }}</td>
+            <td>{{ m.coefficient }}</td>
+            <td>
+                <!-- Bouton Modifier -->
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ m.id }}">Modifier</button>
+
+                <!-- Formulaire de suppression -->
+                <form method="post" action="{{ path('matiere_delete', {id: m.id}) }}" style="display:inline;" onsubmit="return confirm('Supprimer cette matière ?');">
+                    <button class="btn btn-danger">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+
+        <!-- Modal de modification -->
+        <div class="modal fade" id="editModal{{ m.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ form_start(formEdits[m.id], {
+                'action': path('matiere_edit', {'id': m.id}),
+                'method': 'POST'
+            }) }}
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier {{ m.nom }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                {{ form_widget(formEdits[m.id]) }}
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Modifier</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+            {{ form_end(formEdits[m.id], {'render_rest': false}) }}
+        </div>
+    </div>
+</div>
+
+    {% endfor %}
+    </tbody>
+</table>
+<!-- Bouton pour ouvrir la modale d'ajout -->
+<button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addModal">Ajouter une matière</button>
+
+<!-- Modal d'ajout -->
+<div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ form_start(form) }}
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter une matière</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                {{ form_widget(form) }}
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Ajouter</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+            {{ form_end(form, {'render_rest': false}) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

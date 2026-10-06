@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Tableau des notes des étudiants</h1>
+
+    <form method="get" class="row g-3 mb-3">
+        <div class="col-auto">
+            <input type="number" name="min" class="form-control" placeholder="Note min" value="{{ min }}" style="width:120px;">
+        </div>
+        <div class="col-auto">
+            <input type="number" name="max" class="form-control" placeholder="Note max" value="{{ max }}" style="width:120px;">
+        </div>
+        <div class="col-auto">
+            <input type="text" name="nom" class="form-control" placeholder="Nom étudiant" value="{{ nom }}" style="width:180px;">
+        </div>
+        <div class="col-auto">
+            <input type="text" name="matiere" class="form-control" placeholder="Matière" value="{{ matiere }}" style="width:180px;">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Chercher</button>
+        </div>
+    </form>
+
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID Étudiant</th>
+            <th>Nom de l’étudiant</th>
+            <th>Matière</th>
+            <th>Note</th>
+            <th>Coefficient</th> 
+        </tr>
+    </thead>
+    <tbody>
+        {% for note in notes %}
+            <tr>
+                <td>{{ note.etudiant.id }}</td>
+                <td>{{ note.etudiant.nom }}</td>
+                <td>{{ note.matiere.nom }}</td>
+                <td>{{ note.note }}</td>
+                <td>{{ note.matiere.coefficient }}</td> 
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">Aucune note enregistrée.</td> {# colspan mis à jour #}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

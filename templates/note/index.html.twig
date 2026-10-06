@@ -1,0 +1,74 @@
+{# templates/note/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Notes{% endblock %}
+
+{% block body %}
+<h1>Gestion des notes</h1>
+
+
+
+<table class="table">
+    <thead>
+        <tr><th>Note</th><th>Étudiant</th><th>Matière</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        {% for n in notes %}
+        <tr>
+            <td>{{ n.note }}</td>
+            <td>{{ n.etudiant.nom }}</td>
+            <td>{{ n.matiere.nom }}</td>
+            <td>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ n.id }}">Modifier</button>
+                <form method="post" action="{{ path('note_delete', {'id': n.id}) }}" style="display:inline;">
+                    <button class="btn btn-danger" onclick="return confirm('Supprimer cette note ?')">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+
+        <!-- Modal Edit -->
+        <div class="modal fade" id="editModal{{ n.id }}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    {{ form_start(formEdits[n.id], {'action': path('note_edit', {'id': n.id})}) }}
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modifier la note</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_widget(formEdits[n.id]) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">Modifier</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    </div>
+                    {{ form_end(formEdits[n.id]) }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </tbody>
+</table>
+<button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addModal">Ajouter une note</button>
+<!-- Modal Ajouter -->
+<div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ form_start(form) }}
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter une note</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                {{ form_widget(form) }}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success">Ajouter</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
